@@ -1,10 +1,22 @@
-## Method 1 (IMAP, SMTP, DAV)
+## Method 1 via Mobileconfig
 
-Email, contacts and calendar can be configured automatically on Apple devices by installing a profile. It configure IMAP, CardDAV and CalDAV.
+Email, contacts and calendars can be configured automatically on Apple devices by installing a profile. To download a profile you must login to the mailcow UI first.
+
+## Method 1.1: IMAP, SMTP and Cal/CardDAV
+
+This method configures IMAP, CardDAV and CalDAV.
 
 1. Download and open <span class="client_variables_unavailable">the file from <i>https://${MAILCOW_HOSTNAME}/mobileconfig.php</i></span><span class="client_variables_available"><a class="client_var_link" href="mobileconfig.php">mailcow.mobileconfig</a></span>.
 2. Enter the unlock code (iPhone) or computer password (Mac).
 3. Enter your email password three times when prompted.
+
+## Method 1.2: IMAP, SMTP (no DAV)
+
+This method configures IMAP and SMTP only.
+
+1. Download and open <span class="client_variables_unavailable">the file from <i>https://${MAILCOW_HOSTNAME}/mobileconfig.php?only_email</i></span><span class="client_variables_available"><a class="client_var_link" href="mobileconfig.php?only_email">mailcow.mobileconfig</a></span>.
+2. Enter the unlock code (iPhone) or computer password (Mac).
+3. Enter your email password when prompted.
 
 ## Method 2 (Exchange ActiveSync emulation)
 

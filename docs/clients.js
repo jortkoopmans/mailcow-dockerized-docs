@@ -3,12 +3,12 @@ if (window.location.href.indexOf('/client/') >= 0) {
         function setCookie(name, value) {
             document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + "; path=/";
         }
-    
+
         function getParameterByName(name) {
             var match = RegExp('[?#&]' + name + '=([^&]*)').exec(window.location.hash);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
-    
+
         /* Store URL variables in cookies */
         if (getParameterByName('host')) {
             setCookie("host", getParameterByName('host'));
@@ -21,11 +21,14 @@ if (window.location.href.indexOf('/client/') >= 0) {
         if (getParameterByName('name')) {
             setCookie("name", getParameterByName('name'));
         }
+        if (getParameterByName('ui')) {
+            setCookie("ui", getParameterByName('ui'));
+        }
         if (getParameterByName('port')) {
             setCookie("port", getParameterByName('port'));
         }
-        if (getParameterByName('integrator')) {
-            setCookie("integrator", getParameterByName('integrator'));
+        if (getParameterByName('connector')) {
+            setCookie("connector", getParameterByName('connector'));
         }
         if (getParameterByName('outlookEAS')) {
             setCookie("outlookEAS", getParameterByName('outlookEAS'));
@@ -49,7 +52,7 @@ if (window.location.href.indexOf('/client') >= 0) {
             }
             return "";
         }
-    
+
         /* Hide variable fields if no values are available */
         if (!getCookie('host')) {
             Array.prototype.forEach.call(document.getElementsByClassName('client_variables_available'), function(el) {
@@ -60,23 +63,26 @@ if (window.location.href.indexOf('/client') >= 0) {
                 el.style.display = 'none';
             });
         }
-    
+
         /* Hide the TOC, which might contain hidden content */
         Array.prototype.forEach.call(document.getElementsByClassName('md-sidebar--secondary'), function(el) {
             el.style.display = 'none';
         });
-    
+
         /* Substitute variables */
         Array.prototype.forEach.call(document.getElementsByClassName('client_var_host'), function(el) {
             el.innerText = getCookie('host');
         });
         Array.prototype.forEach.call(document.getElementsByClassName('client_var_link'), function(el) {
-            if (!getCookie('host')) {
+            if (!getCookie('ui') && !getCookie('host')) {
                 el.href = '#';
-            } else if (getCookie('port') != '443') {
-                el.href = 'https://' + getCookie('host') + ':' + getCookie('port') + '/' + el.getAttribute("href");
             } else {
-                el.href = 'https://' + getCookie('host') + '/' + el.getAttribute("href");
+                var ui_domain = getCookie('ui') ? getCookie('ui') : getCookie('host');
+                if (getCookie('port') != '443') {
+                    el.href = 'https://' + ui_domain + ':' + getCookie('port') + '/' + el.getAttribute("href");
+                } else {
+                    el.href = 'https://' + ui_domain + '/' + el.getAttribute("href");
+                }
             }
         });
         Array.prototype.forEach.call(document.getElementsByClassName('client_var_email'), function(el) {
@@ -90,17 +96,17 @@ if (window.location.href.indexOf('/client') >= 0) {
                 el.innerText = ':' + getCookie('port');
             });
         }
-    
-        /* Hide those sections that are not applicable because useOutlookForEAS is disabled or SOGo integrator is not available */
-        if (getCookie('integrator')) {
-            Array.prototype.forEach.call(document.getElementsByClassName('client_var_integrator_link'), function(el) {
-                el.href = el.href.replace('__DOMAIN__', getCookie('domain')).replace('__VERSION__', getCookie('integrator'));
+
+        /* Hide those sections that are not applicable because useOutlookForEAS is disabled or SOGo Connector is not available */
+        if (getCookie('connector')) {
+            Array.prototype.forEach.call(document.getElementsByClassName('client_var_connector_link'), function(el) {
+                el.href = el.href.replace('__DOMAIN__', getCookie('domain')).replace('__VERSION__', getCookie('connector'));
             });
-            Array.prototype.forEach.call(document.getElementsByClassName('client_integrator_disabled'), function(el) {
+            Array.prototype.forEach.call(document.getElementsByClassName('client_connector_disabled'), function(el) {
                 el.style.display = 'none';
             });
         } else if (getCookie('host')) {
-            Array.prototype.forEach.call(document.getElementsByClassName('client_integrator_enabled'), function(el) {
+            Array.prototype.forEach.call(document.getElementsByClassName('client_connector_enabled'), function(el) {
                 el.style.display = 'none';
             });
         }
